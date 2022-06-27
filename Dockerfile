@@ -76,6 +76,15 @@ RUN apt-get update \
 
 ENV CHROME_BIN="/usr/local/share/.config/yarn/global/node_modules/puppeteer/.local-chromium/linux-${CHROME_REVISION}/chrome-linux/chrome"
 
+ADD ./fonts /usr/share/fonts/msfonts
+
+RUN yarn global add pm2 \
+    && yarn cache clean \
+    && mkdir -p /apps \
+    && chown -R $APPLICATION_USER:$APPLICATION_GROUP /apps
+
+RUN echo "Asia/Shanghai" > /etc/timezone
+
 WORKDIR /app
 
 USER pptruser
