@@ -23,6 +23,7 @@ RUN apt-get update \
         libdbus-1-3 \
         libexpat1 \
         libfontconfig1 \
+        libgbm-dev \
         libgcc1 \
         libgconf-2-4 \
         libgdk-pixbuf2.0-0 \
@@ -75,6 +76,15 @@ RUN apt-get update \
     && fix_permissions
 
 ENV CHROME_BIN="/usr/local/share/.config/yarn/global/node_modules/puppeteer/.local-chromium/linux-${CHROME_REVISION}/chrome-linux/chrome"
+
+ADD ./fonts /usr/share/fonts/msfonts
+
+RUN yarn global add pm2 \
+    && yarn cache clean \
+    && mkdir -p /apps \
+    && chown -R $APPLICATION_USER:$APPLICATION_GROUP /apps
+
+RUN echo "Asia/Shanghai" > /etc/timezone
 
 WORKDIR /app
 
