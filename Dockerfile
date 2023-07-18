@@ -12,7 +12,7 @@ RUN mkdir screenshots
 
 #RUN apt-get install -y libgbm-dev
 
-RUN echo "Asia/Shanghai" > /etc/timezone
+#RUN echo "Asia/Shanghai" > /etc/timezone
 
 RUN yarn global add pm2 \
     && yarn cache clean \
