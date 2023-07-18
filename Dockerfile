@@ -8,14 +8,3 @@ ENV APPLICATION_USER=pptruser \
 COPY tools tools
 
 RUN mkdir screenshots
-
-RUN apt-get install -y libgbm-dev
-
-ADD ./fonts /usr/share/fonts/msfonts
-
-RUN yarn global add pm2 \
-    && yarn cache clean \
-    && mkdir -p /apps \
-    && chown -R $APPLICATION_USER:$APPLICATION_GROUP /apps
-
-RUN echo "Asia/Shanghai" > /etc/timezone
