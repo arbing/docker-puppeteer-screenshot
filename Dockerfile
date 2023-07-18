@@ -9,7 +9,7 @@ COPY tools tools
 
 RUN mkdir screenshots
 
-RUN apt-get install -y libgbm-dev
+#RUN apt-get install -y libgbm-dev
 
 ADD ./fonts /usr/share/fonts/msfonts
 
