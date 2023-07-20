@@ -73,14 +73,22 @@ RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
     && mkdir -p /home/pptruser/Downloads \
     && mkdir -p /usr/local/share/.config/yarn/global/node_modules \
     && mkdir -p /screenshots \
-    && mkdir -p /app \
-    && fix_permissions \
-    && yarn global add \
-        puppeteer@$PPTR_VERSION \
-    && yarn cache clean \
-    && fix_permissions
+    && mkdir -p /app
 
-ENV CHROME_BIN="/usr/local/share/.config/yarn/global/node_modules/puppeteer/.local-chromium/linux-${CHROME_REVISION}/chrome-linux/chrome"
+# RUN fix_permissions \
+#     && yarn global add \
+#         puppeteer@$PPTR_VERSION \
+#     && yarn cache clean \
+#     && fix_permissions
+
+# RUN apt-get update && apt-get install -y chromium --no-install-recommends && apt-get clean
+
+RUN wget https://snapshot.debian.org/archive/debian-security/20220722T181415Z/pool/updates/main/c/chromium/chromium_103.0.5060.134-1~deb11u1_$ARCH.deb \
+    && dpkg -i chromium_*.deb \
+    && rm -f chromium_*.deb \
+    && apt-get clean
+
+# ENV CHROME_BIN="/usr/local/share/.config/yarn/global/node_modules/puppeteer/.local-chromium/linux-${CHROME_REVISION}/chrome-linux/chrome"
 
 ADD ./fonts /usr/share/fonts/msfonts
 
