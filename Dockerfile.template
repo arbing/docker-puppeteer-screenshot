@@ -1,3 +1,7 @@
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG ARCH
+
 ARG NODE_VERSION=16
 
 FROM node:${NODE_VERSION}-slim
@@ -12,7 +16,7 @@ ENV APPLICATION_USER=pptruser \
 
 COPY ./tools /tools
 
-RUN apt-get update \
+RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
     && apt-get install -yq \
         gconf-service \
         libasound2 \
@@ -57,7 +61,7 @@ RUN apt-get update \
         lsb-release \
         xdg-utils \
         wget \
-    && wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64.deb \
+    && wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_$ARCH.deb \
     && dpkg -i dumb-init_*.deb \
     && rm -f dumb-init_*.deb \
     && apt-get clean \
