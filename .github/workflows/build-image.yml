@@ -26,7 +26,7 @@ jobs:
       - name: Set env
         run: echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v3
         with:
           context: .
           platforms: linux/amd64,linux/arm64
