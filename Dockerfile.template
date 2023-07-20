@@ -83,7 +83,7 @@ RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
 
 RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20220722T181415Z bullseye-security main" >> /etc/apt/sources.list' \
     && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y chromium=103.0.5060.134-1~deb11u1 && apt-get clean
+    && apt-get install -yq chromium=103.0.5060.134-1~deb11u1 && apt-get clean
 
 # RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
 #     && apt-get install -yq libxslt1.1 \
