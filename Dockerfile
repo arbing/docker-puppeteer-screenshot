@@ -5,7 +5,9 @@ FROM node:${NODE_VERSION}-slim
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 ARG ARCH
-RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
+
+RUN ARCH=${TARGETPLATFORM#linux/}
+RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM, ARCH=$ARCH"
 
 ENV APPLICATION_USER=pptruser \
     APPLICATION_GROUP=pptruser \
@@ -17,7 +19,7 @@ ENV APPLICATION_USER=pptruser \
 
 COPY ./tools /tools
 
-RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
+RUN apt-get update \
     && apt-get install -yq \
         gconf-service \
         libasound2 \
