@@ -83,7 +83,8 @@ RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
 
 # RUN apt-get update && apt-get install -y chromium --no-install-recommends && apt-get clean
 
-RUN wget https://snapshot.debian.org/archive/debian-security/20220722T181415Z/pool/updates/main/c/chromium/chromium_103.0.5060.134-1~deb11u1_$ARCH.deb \
+RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
+    && wget https://snapshot.debian.org/archive/debian-security/20220722T181415Z/pool/updates/main/c/chromium/chromium_103.0.5060.134-1~deb11u1_$ARCH.deb \
     && dpkg -i chromium_*.deb \
     && rm -f chromium_*.deb \
     && apt-get clean
