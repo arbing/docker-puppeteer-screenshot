@@ -13,7 +13,8 @@ ENV APPLICATION_USER=pptruser \
     PATH="/tools:${PATH}" \
     LANG="C.UTF-8" \
     PPTR_VERSION=14.4.1 \
-    CHROME_REVISION=1002410
+    CHROME_REVISION=1002410 \
+    CHROMIUM_VERSION=103.0.5060.134-1~deb11u1
 
 COPY ./tools /tools
 
@@ -67,48 +68,22 @@ RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
     && rm -f dumb-init_*.deb \
     && apt-get clean \
     && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd -r $APPLICATION_GROUP \
-    && useradd -r -g $APPLICATION_GROUP -G audio,video $APPLICATION_USER \
-    && mkdir -p /home/pptruser/Downloads \
-    && mkdir -p /usr/local/share/.config/yarn/global/node_modules \
-    && mkdir -p /screenshots \
-    && mkdir -p /app
-
-# RUN fix_permissions \
-#     && yarn global add \
-#         puppeteer@$PPTR_VERSION \
-#     && yarn cache clean \
-#     && fix_permissions
+    && rm -rf /var/lib/apt/lists/*
 
 RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20220722T181415Z bullseye-security main" >> /etc/apt/sources.list' \
     && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -yq chromium-common=103.0.5060.134-1~deb11u1 chromium=103.0.5060.134-1~deb11u1 --no-install-recommends && apt-get clean
-
-# RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
-#     && apt-get install -yq libxslt1.1 \
-#     && wget https://snapshot.debian.org/archive/debian-security/20220722T181415Z/pool/updates/main/c/chromium/chromium-common_103.0.5060.134-1~deb11u1_$ARCH.deb \
-#     && apt install -fy chromium-common_*.deb \
-#     && rm -f chromium-common_*.deb \
-#     && wget https://snapshot.debian.org/archive/debian-security/20220722T181415Z/pool/updates/main/c/chromium/chromium_103.0.5060.134-1~deb11u1_$ARCH.deb \
-#     && apt install -fy chromium_*.deb \
-#     && rm -f chromium_*.deb \
-#     && apt-get clean
-
-# ENV CHROME_BIN="/usr/local/share/.config/yarn/global/node_modules/puppeteer/.local-chromium/linux-${CHROME_REVISION}/chrome-linux/chrome"
-
-ADD ./fonts /usr/share/fonts/msfonts
-
-RUN yarn global add pm2 \
-    && yarn cache clean \
-    && mkdir -p /apps \
-    && chown -R $APPLICATION_USER:$APPLICATION_GROUP /apps
+    && apt-get install -yq chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION --no-install-recommends && apt-get clean
 
 RUN echo "Asia/Shanghai" > /etc/timezone
 
-WORKDIR /app
+ADD ./fonts /usr/share/fonts/msfonts
 
-USER pptruser
+RUN npm install -g pnpm pm2 \
+    && npm cache clean -force \
+    && mkdir -p /apps \
+    && mkdir -p /app
+
+WORKDIR /app
 
 ENTRYPOINT ["dumb-init", "--"]
 
