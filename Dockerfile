@@ -41,9 +41,9 @@ RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230423
     && apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y --force-yes --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
 
-RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230713T092705Z bullseye-security main" >> /etc/apt/sources.list' \
+RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230711T151208Z bullseye-security main" >> /etc/apt/sources.list' \
     && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y --force-yes --no-install-recommends firefox=115.0.2-1 && apt-get clean
+    && apt-get install -y --force-yes --no-install-recommends firefox=115.0.1-1 && apt-get clean
 
 WORKDIR /app
 
