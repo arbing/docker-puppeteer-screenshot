@@ -6,7 +6,7 @@ updates:
       interval: daily
     open-pull-requests-limit: 10
     assignees:
-      - schliflo
+      - arbing
     versioning-strategy: increase
 
   - package-ecosystem: "github-actions"

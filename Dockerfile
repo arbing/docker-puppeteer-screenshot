@@ -9,10 +9,7 @@ ARG BUILDPLATFORM
 RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM, TARGETARCH=$TARGETARCH"
 
 ENV PATH="/tools:${PATH}" \
-    LANG="C.UTF-8" \
-    PPTR_VERSION=19.11.1 \
-    CHROME_REVISION=1108766 \
-    CHROMIUM_VERSION=112.0.5615.138-1~deb11u1
+    LANG="C.UTF-8"
 
 COPY ./tools /tools
 
@@ -26,10 +23,6 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230423T032736Z bullseye-security main" >> /etc/apt/sources.list' \
-    && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y --force-yes --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
-
 RUN echo "Asia/Shanghai" > /etc/timezone
 
 ADD ./fonts /usr/share/fonts/msfonts
@@ -39,6 +32,14 @@ RUN npm install -g pnpm pm2 \
     && mkdir -p /screenshots \
     && mkdir -p /apps \
     && mkdir -p /app
+
+ENV PPTR_VERSION=19.11.1 \
+    CHROME_REVISION=1108766 \
+    CHROMIUM_VERSION=112.0.5615.138-1~deb11u1
+
+RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230423T032736Z bullseye-security main" >> /etc/apt/sources.list' \
+    && apt-get -o Acquire::Check-Valid-Until=false update \
+    && apt-get install -y --force-yes --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
 
 WORKDIR /app
 
