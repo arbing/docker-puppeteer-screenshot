@@ -10,9 +10,9 @@ RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM, TARGETAR
 
 ENV PATH="/tools:${PATH}" \
     LANG="C.UTF-8" \
-    PPTR_VERSION=14.4.1 \
-    CHROME_REVISION=1002410 \
-    CHROMIUM_VERSION=103.0.5060.134-1~deb11u1
+    PPTR_VERSION=19.11.1 \
+    CHROME_REVISION=1108766 \
+    CHROMIUM_VERSION=112.0.5615.138-1~deb11u1
 
 COPY ./tools /tools
 
@@ -26,9 +26,9 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20220722T181415Z bullseye-security main" >> /etc/apt/sources.list' \
+RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230423T032736Z bullseye-security main" >> /etc/apt/sources.list' \
     && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -yq chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION --no-install-recommends && apt-get clean
+    && apt-get install -y --force-yes --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
 
 RUN echo "Asia/Shanghai" > /etc/timezone
 
