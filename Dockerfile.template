@@ -6,7 +6,7 @@ ARG TARGETPLATFORM
 ARG TARGETARCH
 ARG BUILDPLATFORM
 
-RUN ARCH=${TARGETPLATFORM#linux/} && echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM, TARGETARCH=$TARGETARCH, ARCH=$ARCH"
+RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM, TARGETARCH=$TARGETARCH"
 
 ENV PATH="/tools:${PATH}" \
     LANG="C.UTF-8" \
@@ -16,10 +16,10 @@ ENV PATH="/tools:${PATH}" \
 
 COPY ./tools /tools
 
-RUN ARCH=${TARGETPLATFORM#linux/} && apt-get update \
+RUN apt-get update \
     && apt-get install -y --force-yes --no-install-recommends \
         wget \
-    && wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_$ARCH.deb \
+    && wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_$TARGETARCH.deb \
     && dpkg -i dumb-init_*.deb \
     && rm -f dumb-init_*.deb \
     && apt-get clean \
