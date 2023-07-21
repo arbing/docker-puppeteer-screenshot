@@ -14,7 +14,7 @@ ENV PATH="/tools:${PATH}" \
 COPY ./tools /tools
 
 RUN apt-get update \
-    && apt-get install -y --force-yes --no-install-recommends \
+    && apt-get install -y --no-install-recommends \
         wget \
     && wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_$TARGETARCH.deb \
     && dpkg -i dumb-init_*.deb \
@@ -39,7 +39,9 @@ ENV PPTR_VERSION=19.11.1 \
 
 RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20230423T032736Z bullseye-security main" >> /etc/apt/sources.list' \
     && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y --force-yes --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
+    && apt-get install -y --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
+
+RUN apt-get install -y xorg xserver-xorg xvfb libx11-dev libxext-dev procps && apt-get clean
 
 WORKDIR /app
 
