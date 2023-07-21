@@ -1,4 +1,4 @@
-ARG NODE_VERSION=16
+ARG NODE_VERSION=18
 
 FROM satantime/puppeteer-node:${NODE_VERSION}-bullseye-slim
 
