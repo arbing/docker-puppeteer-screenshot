@@ -33,11 +33,11 @@ RUN npm install -g pnpm pm2 \
     && mkdir -p /apps \
     && mkdir -p /app
 
-ENV PPTR_VERSION=12.0.1 \
-    CHROME_REVISION=938248 \
-    CHROMIUM_VERSION=97.0.4692.99-1~deb11u2
+ENV PPTR_VERSION=13.1.3 \
+    CHROME_REVISION=950341 \
+    CHROMIUM_VERSION=98.0.4758.102-1~deb11u1
 
-RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20220124T070450Z bullseye-security main" >> /etc/apt/sources.list' \
+RUN sh -c 'echo "deb http://snapshot.debian.org/archive/debian-security/20220219T044031Z bullseye-security main" >> /etc/apt/sources.list' \
     && apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y --no-install-recommends chromium-common=$CHROMIUM_VERSION chromium=$CHROMIUM_VERSION && apt-get clean
 
