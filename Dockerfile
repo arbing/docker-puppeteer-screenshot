@@ -3,7 +3,8 @@ ARG NODE_VERSION=18
 FROM node:${NODE_VERSION}-bullseye-slim
 
 RUN npm install -g pnpm \
-    && npm cache clean -force
+    && npm cache clean -force \
+    && pnpm setup
 
 ENV APPLICATION_USER=pptruser \
     APPLICATION_GROUP=pptruser \
