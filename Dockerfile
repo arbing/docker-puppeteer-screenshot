@@ -2,11 +2,9 @@ ARG NODE_VERSION=18
 
 FROM node:${NODE_VERSION}-bullseye-slim
 
-ENV PNPM_HOME="/root/.local/share/pnpm"
-ENV PATH="${PATH}:${PNPM_HOME}"
-
 RUN npm install -g pnpm \
-    && npm cache clean -force
+    && npm cache clean -force \
+    && pnpm setup
 
 ENV APPLICATION_USER=pptruser \
     APPLICATION_GROUP=pptruser \
