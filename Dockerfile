@@ -1,6 +1,9 @@
-ARG NODE_VERSION=16
+ARG NODE_VERSION=18
 
-FROM node:${NODE_VERSION}-slim
+FROM node:${NODE_VERSION}-bullseye-slim
+
+RUN npm install -g pnpm \
+    && npm cache clean -force
 
 ENV APPLICATION_USER=pptruser \
     APPLICATION_GROUP=pptruser \
@@ -63,32 +66,23 @@ RUN apt-get update \
     && apt-get clean \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
-    && groupadd -r $APPLICATION_GROUP \
-    && useradd -r -g $APPLICATION_GROUP -G audio,video $APPLICATION_USER \
-    && mkdir -p /home/pptruser/Downloads \
-    && mkdir -p /usr/local/share/.config/yarn/global/node_modules \
     && mkdir -p /screenshots \
     && mkdir -p /app \
-    && fix_permissions \
-    && yarn global add \
+    && pnpm add -g \
         puppeteer@$PPTR_VERSION \
-    && yarn cache clean \
-    && fix_permissions
+    && pnpm store prune
 
 ENV CHROME_BIN="/usr/local/share/.config/yarn/global/node_modules/puppeteer/.local-chromium/linux-${CHROME_REVISION}/chrome-linux/chrome"
 
 ADD ./fonts /usr/share/fonts/msfonts
 
-RUN yarn global add pm2 \
-    && yarn cache clean \
-    && mkdir -p /apps \
-    && chown -R $APPLICATION_USER:$APPLICATION_GROUP /apps
+RUN pnpm add -g pm2 \
+    && pnpm store prune \
+    && mkdir -p /apps
 
 RUN echo "Asia/Shanghai" > /etc/timezone
 
 WORKDIR /app
-
-USER pptruser
 
 ENTRYPOINT ["dumb-init", "--"]
 
